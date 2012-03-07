@@ -20,11 +20,11 @@
 		};
 		
 		// Passing in the object instead of specifying a note
-		if(!note) {
+		if( !note ) {
 			note = this.html();
 		}
 		
-		if(options) {
+		if( !!options ) {
 			$.extend( settings, options );
 		}
 		
