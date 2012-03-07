@@ -1,0 +1,83 @@
+<html>
+<head>
+	<title>Sticky Demo</title>
+	<link type="text/css" rel="stylesheet" href="sticky.css" />
+	<style type="text/css">
+		body {
+			font-family:Gill Sans MT, Gill Sans, Verdana, sans-serif;
+			padding:0;
+			margin:20px;
+			color:#727272;
+		}
+		.button {
+			list-style-type:none;
+			float:left;
+			background:#eee;
+			border:1px solid #bbb;
+			padding:5px 10px;
+			margin:0px 10px 10px 0px;
+			border-radius:6px;
+			-moz-border-radius:6px;
+			-webkit-border-radius:6px;
+			cursor:pointer;
+			box-shadow:0px 2px 3px #aaa;
+			-moz-box-shadow:0px 2px 3px #aaa;
+			-webkit-box-shadow:0px 2px 3px #aaa;
+			text-shadow:0px 1px 0px #fff;
+		}
+		.button:hover { color:#000; }
+		.button:active { box-shadow:none; }
+		.c { clear:both; }
+		#results { font-weight:bold; }
+	</style>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="sticky.js"></script>
+	<script>
+		$(document).ready(function() {
+			
+			$.sticky( 'The page has loaded!' );
+			
+			$('#checkweather').click(function(){
+				$.getJSON(
+					'http://query.yahooapis.com/v1/public/yql?q=select%20item%20from%20weather.forecast%20where%20location%3D%2292009%22&format=json',
+					function( response ){
+						// formatting isn't perfect because yahoo delivers shitty html and sticky.css doesn't know better either
+						// but it's just an example anyway :)
+						$.sticky( '<div>' + response.query.results.channel.item.description + '</div><div class="c"></div>' );
+					}
+				);
+			});
+
+		});
+</script>
+</head>
+<body>
+	<h2>Demo</h2>
+	<p>Let's start with some basic messages. The default position is top-right with an 'autoclose' of 5 seconds. You'll also notice that duplicates are allowed, although you can disable duplicate messages within the settings.</p>
+	
+	Returned: <span id="results">&nbsp;</span>
+	<div class="c"></div>
+	<br />
+	
+	<div onclick="$.sticky('<b>Can you see me?</b><p>I bet you\'re feeling warm and fuzzy inside right now.</p>',false,function(r){$('#results').html(JSON.stringify(r));});" class="button">$.sticky('&lt;b>Can you see me?&lt;/b>&lt;p>...');</div>
+	
+	<div onclick="$.sticky('Upload complete',false,function(r){$('#results').html(JSON.stringify(r));});" class="button">$.sticky('Upload complete');</div>
+	
+	<div onclick="$.sticky('<b>You have a new message!</b>',false,function(r){$('#results').html(JSON.stringify(r));});" class="button">$.sticky('&lt;b>You have a new message!&lt;/b>');</div>
+	<div class="c"></div>
+
+	<p>As you can see above, a bit of JSON will be returned with some potentially pertinent information. Now, let's use Sticky in a more traditional sense and attach it to an object. Below is a div with my Twitter profile picture and bio. The styling of the elements within the object will be carried into the Sticky note.</p>
+		
+	<div id="ThrivingKings" style="border:1px solid #aaa; padding:10px;height:48px; width:400px;"><img src="http://api.twitter.com/1/users/profile_image?screen_name=ThrivingKings" style="height:48px;float:left;" /><p id="tweet" style="margin:0;padding:0;margin-left:60px;font-size:13px;font-style:italic;">Web developer, great design obsessor, music fiend, good food consumer, beer snob, major geek. Think. Live. Question.</p></div>
+	<div class="c"></div>
+	<br />
+	
+	<div onclick="$('#ThrivingKings').sticky();" class="button">$('#ThrivingKings').sticky();</div>
+	<div class="c"></div>
+	
+	<p>We can also use Sticky to display data we've grabbed via AJAX. This could make for a very powerful message queue system for your users. The example below calls a simple script that will display the current weather for a random selected city.</p>
+
+	<div id="checkweather" class="button">Check the weather</div>
+	<div class="c"></div>
+</body>
+</html>
